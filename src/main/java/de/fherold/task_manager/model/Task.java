@@ -14,6 +14,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents a Task entity.
+ * Contains fields for task details and status.
+ */
+
 @Entity
 @Getter
 @Setter
