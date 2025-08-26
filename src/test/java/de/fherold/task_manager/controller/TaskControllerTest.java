@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -113,5 +114,42 @@ public class TaskControllerTest {
                                 .andExpect(jsonPath("$[1].title").value("Task 2"))
                                 .andExpect(jsonPath("$[1].description").value("Desc 2"))
                                 .andExpect(jsonPath("$[1].status").value("DONE"));
+        }
+
+        @Test
+        void updateTask_shouldReturnUpdatedTask() throws Exception {
+                Long id = 1L;
+
+                TaskDto inputDto = TaskDto.builder()
+                                .title("Updated Task")
+                                .description("Updated Description")
+                                .status(Task.TaskStatus.DONE)
+                                .build();
+
+                TaskDto updatedDto = TaskDto.builder()
+                                .id(id)
+                                .title("Updated Task")
+                                .description("Updated Description")
+                                .status(Task.TaskStatus.DONE)
+                                .build();
+
+                when(taskService.updateTask(id, inputDto)).thenReturn(updatedDto);
+
+                String json = """
+                                {
+                                    "title": "Updated Task",
+                                    "description": "Updated Description",
+                                    "status": "DONE"
+                                }
+                                """;
+
+                mockMvc.perform(put("/tasks/{id}", id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.id").value(id))
+                                .andExpect(jsonPath("$.title").value("Updated Task"))
+                                .andExpect(jsonPath("$.description").value("Updated Description"))
+                                .andExpect(jsonPath("$.status").value("DONE"));
         }
 }

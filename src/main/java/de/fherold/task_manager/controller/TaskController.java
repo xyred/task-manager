@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import de.fherold.task_manager.dto.TaskDto;
 import de.fherold.task_manager.service.TaskService;
+import org.springframework.web.bind.annotation.PutMapping;
 
 /**
  * Controller for managing tasks.
@@ -19,7 +20,7 @@ import de.fherold.task_manager.service.TaskService;
 
 @RestController
 public class TaskController {
-    
+
     private final TaskService taskService;
 
     public TaskController(TaskService taskService) {
@@ -30,7 +31,7 @@ public class TaskController {
     public TaskDto createTask(@RequestBody TaskDto taskDto) {
         return taskService.createTask(taskDto);
     }
-    
+
     @GetMapping("/tasks/{id}")
     public TaskDto getTask(@PathVariable Long id) {
         return taskService.getTask(id);
@@ -39,5 +40,10 @@ public class TaskController {
     @GetMapping("/tasks")
     public List<TaskDto> getAllTasks() {
         return taskService.getAllTasks();
+    }
+
+    @PutMapping("tasks/{id}")
+    public TaskDto updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+        return taskService.updateTask(id, taskDto);
     }
 }

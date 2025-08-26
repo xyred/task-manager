@@ -56,4 +56,15 @@ public class TaskService {
     public List<TaskDto> getAllTasks() {
         return taskRepository.findAll().stream().map(this::toDto).toList();
     }
+
+    public TaskDto updateTask(Long id, TaskDto dto) {
+        Task existing = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+        existing.setTitle(dto.getTitle());
+        existing.setDescription(dto.getDescription());
+        existing.setStatus(dto.getStatus());
+        
+        Task updated = taskRepository.save(existing);
+        return toDto(updated);
+    }
 }
