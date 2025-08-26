@@ -11,8 +11,9 @@ A Spring Boot REST API for managing tasks.
 - Created unit test for the `Task` model
 - Added `TaskRepository` interface for data access
 - Implemented `TaskService` for business logic
-- Implemented `TaskController` with POST endpoint for task creation
-- Added unit and controller tests for service and endpoint
+- Implemented `TaskController` with POST and GET endpoints for task creation and retrieval
+- Added custom `TaskNotFoundException` and global exception handler for 404 responses
+- Added unit and controller tests for service and endpoints, including not-found case
 
 ## Getting Started
 

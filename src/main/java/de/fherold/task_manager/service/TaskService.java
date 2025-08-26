@@ -3,6 +3,7 @@ package de.fherold.task_manager.service;
 import org.springframework.stereotype.Service;
 
 import de.fherold.task_manager.dto.TaskDto;
+import de.fherold.task_manager.exception.TaskNotFoundException;
 import de.fherold.task_manager.model.Task;
 import de.fherold.task_manager.repository.TaskRepository;
 
@@ -42,5 +43,11 @@ public class TaskService {
                 .description(task.getDescription())
                 .status(task.getStatus())
                 .build();
+    }
+
+    public TaskDto getTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+        return toDto(task);
     }
 }
