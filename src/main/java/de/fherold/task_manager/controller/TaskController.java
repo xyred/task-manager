@@ -1,6 +1,9 @@
 package de.fherold.task_manager.controller;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,5 +34,10 @@ public class TaskController {
     @GetMapping("/tasks/{id}")
     public TaskDto getTask(@PathVariable Long id) {
         return taskService.getTask(id);
+    }
+
+    @GetMapping("/tasks")
+    public List<TaskDto> getAllTasks() {
+        return taskService.getAllTasks();
     }
 }

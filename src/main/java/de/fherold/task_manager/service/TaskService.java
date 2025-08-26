@@ -1,5 +1,7 @@
 package de.fherold.task_manager.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import de.fherold.task_manager.dto.TaskDto;
@@ -21,12 +23,6 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public TaskDto createTask(TaskDto dto) {
-        Task task = toEntity(dto);
-        Task saved = taskRepository.save(task);
-        return toDto(saved);
-    }
-
     private Task toEntity(TaskDto dto) {
         return Task.builder()
                 .id(dto.getId())
@@ -45,9 +41,19 @@ public class TaskService {
                 .build();
     }
 
+    public TaskDto createTask(TaskDto dto) {
+        Task task = toEntity(dto);
+        Task saved = taskRepository.save(task);
+        return toDto(saved);
+    }
+
     public TaskDto getTask(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
         return toDto(task);
+    }
+
+    public List<TaskDto> getAllTasks() {
+        return taskRepository.findAll().stream().map(this::toDto).toList();
     }
 }
