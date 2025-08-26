@@ -1,6 +1,6 @@
 package de.fherold.task_manager.controller;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import de.fherold.task_manager.model.Task;
 import de.fherold.task_manager.dto.TaskDto;
+import de.fherold.task_manager.exception.TaskNotFoundException;
 import de.fherold.task_manager.service.TaskService;
 
 @WebMvcTest(TaskController.class)
@@ -160,5 +162,15 @@ public class TaskControllerTest {
 
                 mockMvc.perform(delete("/tasks/{id}", id))
                                 .andExpect(status().isNoContent());
+        }
+
+        @Test
+        void deleteTask_shouldReturn404WhenNotFound() throws Exception {
+                Long missingId = 99L;
+                doThrow(new TaskNotFoundException(missingId)).when(taskService).deleteTask(missingId);
+
+                mockMvc.perform(delete("/tasks/{id}", missingId))
+                                .andExpect(status().isNotFound())
+                                .andExpect(content().string("Task not found with id: 99"));
         }
 }
