@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -151,5 +152,13 @@ public class TaskControllerTest {
                                 .andExpect(jsonPath("$.title").value("Updated Task"))
                                 .andExpect(jsonPath("$.description").value("Updated Description"))
                                 .andExpect(jsonPath("$.status").value("DONE"));
+        }
+
+        @Test
+        void deleteTask_shouldReturnNoContent() throws Exception {
+                Long id = 1L;
+
+                mockMvc.perform(delete("/tasks/{id}", id))
+                                .andExpect(status().isNoContent());
         }
 }

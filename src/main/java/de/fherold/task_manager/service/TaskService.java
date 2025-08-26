@@ -63,8 +63,14 @@ public class TaskService {
         existing.setTitle(dto.getTitle());
         existing.setDescription(dto.getDescription());
         existing.setStatus(dto.getStatus());
-        
+
         Task updated = taskRepository.save(existing);
         return toDto(updated);
+    }
+
+    public void deleteTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+        taskRepository.delete(task);
     }
 }
