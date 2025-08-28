@@ -8,9 +8,9 @@ spring:
     password: ${DB_PASSWORD}
   sql:
     init:
-      mode: always
+      mode: never
       data-locations: classpath:data-prod.sql
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: true  
