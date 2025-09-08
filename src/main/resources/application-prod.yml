@@ -13,4 +13,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true  
+    show-sql: true
+
+cors:
+  allowed-origins:
+    - http://localhost:5173
+    - http://localhost:4173
+    - https://task-manager-frontend-plum-five.vercel.app/
