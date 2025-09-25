@@ -58,5 +58,5 @@ jobs:
             export DB_USER="${DB_USER}"
             export DB_PASSWORD="${DB_PASSWORD}"
             pkill -f "java -jar" || true
-            nohup java -jar ~/task-manager-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+            nohup java -jar ~/task-manager-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > app.log 2>&1 &
           '
