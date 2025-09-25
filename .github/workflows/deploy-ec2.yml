@@ -40,7 +40,11 @@ jobs:
           ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} '
             if ! command -v java >/dev/null 2>&1; then
               if [ -f /etc/os-release ] && grep -q "Amazon Linux" /etc/os-release; then
-                sudo amazon-linux-extras install java-openjdk17 -y
+                if grep -q "2023" /etc/os-release; then
+                  sudo dnf install java-17-amazon-corretto -y
+                else
+                  sudo yum install java-17-openjdk -y
+                fi
               elif [ -f /etc/os-release ] && grep -q "Ubuntu" /etc/os-release; then
                 sudo apt update
                 sudo apt install openjdk-17-jdk -y
