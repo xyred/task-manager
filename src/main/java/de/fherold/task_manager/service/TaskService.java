@@ -1,13 +1,13 @@
 package de.fherold.task_manager.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import de.fherold.task_manager.dto.TaskDto;
 import de.fherold.task_manager.exception.TaskNotFoundException;
 import de.fherold.task_manager.model.Task;
 import de.fherold.task_manager.repository.TaskRepository;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 /**
  * Service class for managing tasks.
