@@ -40,7 +40,7 @@ public class TaskServiceTest {
                 .build();
 
         when(taskRepository.save(any(Task.class))).thenReturn(savedTask);
-        
+
         TaskDto result = taskService.createTask(inputDto);
 
         assertThat(result.getId()).isEqualTo(1L);

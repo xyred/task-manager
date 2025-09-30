@@ -23,7 +23,9 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    private Task toEntity(TaskDto dto) {
+    public Task toEntity(TaskDto dto) {
+        if (dto == null)
+            return null;
         return Task.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
@@ -32,7 +34,9 @@ public class TaskService {
                 .build();
     }
 
-    private TaskDto toDto(Task task) {
+    public TaskDto toDto(Task task) {
+        if (task == null)
+            return null;
         return TaskDto.builder()
                 .id(task.getId())
                 .title(task.getTitle())
@@ -58,13 +62,13 @@ public class TaskService {
     }
 
     public TaskDto updateTask(Long id, TaskDto dto) {
-        Task existing = taskRepository.findById(id)
+        Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
-        existing.setTitle(dto.getTitle());
-        existing.setDescription(dto.getDescription());
-        existing.setStatus(dto.getStatus());
+        task.setTitle(dto.getTitle());
+        task.setDescription(dto.getDescription());
+        task.setStatus(dto.getStatus());
 
-        Task updated = taskRepository.save(existing);
+        Task updated = taskRepository.save(task);
         return toDto(updated);
     }
 
