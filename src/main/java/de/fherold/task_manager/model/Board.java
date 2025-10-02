@@ -17,7 +17,7 @@ public class Board {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String name;
+    private String title;
 
     @Column(length = 500)
     private String description;

@@ -75,7 +75,6 @@ public class UserService {
         return toDto(updated);
     }
 
-
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

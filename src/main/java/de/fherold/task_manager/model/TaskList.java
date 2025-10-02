@@ -22,7 +22,7 @@ public class TaskList {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String name;
+    private String title;
 
     @Column(nullable = false)
     private Integer position;

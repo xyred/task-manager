@@ -16,7 +16,7 @@ class BoardRepositoryTest {
     @Test
     void testSaveAndFindBoard() {
         Board board = Board.builder()
-                .name("Team Board")
+                .title("Team Board")
                 .description("Board for team collaboration")
                 .build();
 
@@ -25,7 +25,7 @@ class BoardRepositoryTest {
 
         Board found = boardRepository.findById(saved.getId()).orElse(null);
         assertThat(found).isNotNull();
-        assertThat(found.getName()).isEqualTo("Team Board");
+        assertThat(found.getTitle()).isEqualTo("Team Board");
         assertThat(found.getDescription()).isEqualTo("Board for team collaboration");
     }
 }

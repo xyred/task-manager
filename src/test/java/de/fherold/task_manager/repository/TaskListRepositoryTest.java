@@ -16,7 +16,7 @@ class TaskListRepositoryTest {
     @Test
     void testSaveAndFindTaskList() {
         TaskList list = TaskList.builder()
-                .name("To Do")
+                .title("To Do")
                 .position(1)
                 .build();
 
@@ -25,7 +25,7 @@ class TaskListRepositoryTest {
 
         TaskList found = taskListRepository.findById(saved.getId()).orElse(null);
         assertThat(found).isNotNull();
-        assertThat(found.getName()).isEqualTo("To Do");
+        assertThat(found.getTitle()).isEqualTo("To Do");
         assertThat(found.getPosition()).isEqualTo(1);
     }
 }
