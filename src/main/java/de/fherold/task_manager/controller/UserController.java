@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller for managing users.
+ * Provides endpoints for user operations.
+ */
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

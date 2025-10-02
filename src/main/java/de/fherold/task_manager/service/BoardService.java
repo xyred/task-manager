@@ -65,6 +65,7 @@ public class BoardService {
         Board board = optionalBoard.get();
         board.setTitle(boardDto.getTitle());
         board.setDescription(boardDto.getDescription());
+
         Board updated = boardRepository.save(board);
         return toDto(updated);
     }
