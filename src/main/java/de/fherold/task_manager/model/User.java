@@ -1,5 +1,7 @@
 package de.fherold.task_manager.model;
 
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,4 +31,10 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @ManyToMany(mappedBy = "members")
+    private Set<Board> boards;
+
+    @ManyToMany(mappedBy = "assignees")
+    private Set<Task> tasks;
 }

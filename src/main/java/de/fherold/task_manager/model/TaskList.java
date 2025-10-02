@@ -1,5 +1,7 @@
 package de.fherold.task_manager.model;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,4 +28,11 @@ public class TaskList {
 
     @Column(nullable = false)
     private Integer position;
+
+    @ManyToOne
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
+
+    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks;
 }

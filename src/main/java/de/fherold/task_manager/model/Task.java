@@ -1,5 +1,7 @@
 package de.fherold.task_manager.model;
 
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +32,18 @@ public class Task {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "task_list_id", nullable = false)
+    private TaskList taskList;
+
+    @ManyToMany
+    @JoinTable(
+            name = "task_assignees",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> assignees;
 
     public enum TaskStatus {
         TODO,

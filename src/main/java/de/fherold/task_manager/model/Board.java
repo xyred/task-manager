@@ -1,5 +1,8 @@
 package de.fherold.task_manager.model;
 
+import java.util.List;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,4 +24,15 @@ public class Board {
 
     @Column(length = 500)
     private String description;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskList> taskLists;
+
+    @ManyToMany
+    @JoinTable(
+        name = "board_members",
+        joinColumns = @JoinColumn(name = "board_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> users;
 }
