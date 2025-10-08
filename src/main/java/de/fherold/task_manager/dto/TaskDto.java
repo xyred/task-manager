@@ -1,5 +1,7 @@
 package de.fherold.task_manager.dto;
 
+import java.util.Set;
+
 import de.fherold.task_manager.model.Task.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +22,6 @@ public class TaskDto {
     private String title;
     private String description;
     private TaskStatus status;
+    private Long taskListId; // ID of the associated task list
+    private Set<Long> assigneeIds; // IDs of users assigned to the task
 }

@@ -1,5 +1,7 @@
 package de.fherold.task_manager.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +20,6 @@ public class TaskListDto {
     private Long id;
     private String title;
     private Integer position;
+    private Long boardId; // ID of the associated board
+    private List<Long> taskIds; // IDs of tasks in the task list
 }
