@@ -21,6 +21,6 @@ public class BoardDto {
     private Long id;
     private String title;
     private String description;
-    private List<Long> userId; // ID of the user associated with the board
+    private List<Long> taskListIds; // IDs of the task lists associated with the board
     private Set<Long> memberIds; // IDs of users who are members of the board
 }

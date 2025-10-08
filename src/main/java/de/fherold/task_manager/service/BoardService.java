@@ -1,13 +1,19 @@
 package de.fherold.task_manager.service;
 
-import de.fherold.task_manager.dto.BoardDto;
-import de.fherold.task_manager.model.Board;
-import de.fherold.task_manager.repository.BoardRepository;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+
+import de.fherold.task_manager.dto.BoardDto;
+import de.fherold.task_manager.model.Board;
+import de.fherold.task_manager.model.TaskList;
+import de.fherold.task_manager.model.User;
+import de.fherold.task_manager.repository.BoardRepository;
+import de.fherold.task_manager.repository.TaskListRepository;
+import de.fherold.task_manager.repository.UserRepository;
 
 /**
  * Service class for managing boards.
@@ -18,18 +24,40 @@ import org.springframework.stereotype.Service;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final TaskListRepository taskListRepository;
+    private final UserRepository userRepository;
 
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(BoardRepository boardRepository, TaskListRepository taskListRepository,
+            UserRepository userRepository) {
         this.boardRepository = boardRepository;
+        this.taskListRepository = taskListRepository;
+        this.userRepository = userRepository;
     }
 
     public Board toEntity(BoardDto dto) {
         if (dto == null)
             return null;
+
+        List<TaskList> taskLists = dto.getTaskListIds() == null ? List.of()
+                : dto.getTaskListIds().stream()
+                        .map(taskListRepository::findById)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .toList();
+
+        Set<User> users = dto.getMemberIds() == null ? Set.of()
+                : dto.getMemberIds().stream()
+                        .map(userRepository::findById)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toSet());
+
         return Board.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .description(dto.getDescription())
+                .taskLists(taskLists)
+                .users(users)
                 .build();
     }
 
@@ -40,6 +68,16 @@ public class BoardService {
                 .id(board.getId())
                 .title(board.getTitle())
                 .description(board.getDescription())
+                .taskListIds(board.getTaskLists() == null ? List.of()
+                        : board.getTaskLists().stream()
+                                .filter(tl -> tl != null && tl.getId() != null)
+                                .map(TaskList::getId)
+                                .toList())
+                .memberIds(board.getUsers() == null ? Set.of()
+                        : board.getUsers().stream()
+                                .filter(u -> u != null && u.getId() != null)
+                                .map(User::getId)
+                                .collect(Collectors.toSet()))
                 .build();
     }
 
@@ -65,6 +103,22 @@ public class BoardService {
         Board board = optionalBoard.get();
         board.setTitle(boardDto.getTitle());
         board.setDescription(boardDto.getDescription());
+
+        List<TaskList> taskLists = boardDto.getTaskListIds() == null ? List.of()
+                : boardDto.getTaskListIds().stream()
+                        .map(taskListRepository::findById)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .toList();
+        board.setTaskLists(taskLists);
+
+        Set<User> users = boardDto.getMemberIds() == null ? Set.of()
+                : boardDto.getMemberIds().stream()
+                        .map(userRepository::findById)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toSet());
+        board.setUsers(users);
 
         Board updated = boardRepository.save(board);
         return toDto(updated);
