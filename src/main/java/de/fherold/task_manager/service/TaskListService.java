@@ -1,8 +1,13 @@
 package de.fherold.task_manager.service;
 
 import de.fherold.task_manager.dto.TaskListDto;
+import de.fherold.task_manager.model.Board;
+import de.fherold.task_manager.model.Task;
 import de.fherold.task_manager.model.TaskList;
+import de.fherold.task_manager.repository.BoardRepository;
 import de.fherold.task_manager.repository.TaskListRepository;
+import de.fherold.task_manager.repository.TaskRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,18 +17,35 @@ import java.util.Optional;
 public class TaskListService {
 
     private final TaskListRepository taskListRepository;
+    private final BoardRepository boardRepository;
+    private final TaskRepository taskRepository;
 
-    public TaskListService(TaskListRepository taskListRepository) {
+    public TaskListService(TaskListRepository taskListRepository, BoardRepository boardRepository,
+            TaskRepository taskRepository) {
         this.taskListRepository = taskListRepository;
+        this.boardRepository = boardRepository;
+        this.taskRepository = taskRepository;
     }
 
     public TaskList toEntity(TaskListDto dto) {
         if (dto == null)
             return null;
+
+        Board board = dto.getBoardId() == null ? null : boardRepository.findById(dto.getBoardId()).orElse(null);
+
+        List<Task> tasks = dto.getTaskIds() == null ? List.of()
+                : dto.getTaskIds().stream()
+                        .map(taskRepository::findById)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .toList();
+
         return TaskList.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .position(dto.getPosition())
+                .board(board)
+                .tasks(tasks)
                 .build();
     }
 
@@ -34,6 +56,12 @@ public class TaskListService {
                 .id(taskList.getId())
                 .title(taskList.getTitle())
                 .position(taskList.getPosition())
+                .boardId(taskList.getBoard() == null ? null : taskList.getBoard().getId())
+                .taskIds(taskList.getTasks() == null ? List.of()
+                        : taskList.getTasks().stream()
+                                .filter(t -> t != null && t.getId() != null)
+                                .map(t -> t.getId())
+                                .toList())
                 .build();
     }
 
@@ -54,7 +82,9 @@ public class TaskListService {
                 .map(existing -> {
                     existing.setTitle(updatedTaskList.getTitle());
                     existing.setPosition(updatedTaskList.getPosition());
-                    // Add more fields as needed
+                    existing.setBoard(updatedTaskList.getBoard());
+                    existing.setTasks(updatedTaskList.getTasks());
+
                     return taskListRepository.save(existing);
                 })
                 .orElse(null);
