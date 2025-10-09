@@ -32,7 +32,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(mappedBy = "members")
+    @ManyToMany(mappedBy = "users")
     private Set<Board> boards;
 
     @ManyToMany(mappedBy = "assignees")
