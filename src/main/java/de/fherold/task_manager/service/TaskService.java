@@ -1,13 +1,20 @@
 package de.fherold.task_manager.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import de.fherold.task_manager.dto.TaskDto;
 import de.fherold.task_manager.exception.TaskNotFoundException;
 import de.fherold.task_manager.model.Task;
+import de.fherold.task_manager.model.TaskList;
+import de.fherold.task_manager.model.User;
+import de.fherold.task_manager.repository.TaskListRepository;
 import de.fherold.task_manager.repository.TaskRepository;
-
-import java.util.List;
-
-import org.springframework.stereotype.Service;
+import de.fherold.task_manager.repository.UserRepository;
 
 /**
  * Service class for managing tasks.
@@ -18,19 +25,37 @@ import org.springframework.stereotype.Service;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final TaskListRepository taskListRepository;
+    private final UserRepository userRepository;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, TaskListRepository taskListRepository,
+            UserRepository userRepository) {
         this.taskRepository = taskRepository;
+        this.taskListRepository = taskListRepository;
+        this.userRepository = userRepository;
     }
 
     public Task toEntity(TaskDto dto) {
         if (dto == null)
             return null;
+
+        TaskList taskList = dto.getTaskListId() == null ? null
+                : taskListRepository.findById(dto.getTaskListId()).orElse(null);
+
+        Set<User> assignees = dto.getAssigneeIds() == null ? Set.of()
+                : dto.getAssigneeIds().stream()
+                        .map(userRepository::findById)
+                        .filter(Optional::isPresent)
+                        .map(Optional::orElseThrow)
+                        .collect(Collectors.toSet());
+
         return Task.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .description(dto.getDescription())
                 .status(dto.getStatus())
+                .taskList(taskList)
+                .assignees(assignees)
                 .build();
     }
 
@@ -42,6 +67,12 @@ public class TaskService {
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .status(task.getStatus())
+                .taskListId(task.getTaskList() == null ? null : task.getTaskList().getId())
+                .assigneeIds(task.getAssignees() == null ? Set.of()
+                        : task.getAssignees().stream()
+                                .filter(u -> u != null && u.getId() != null)
+                                .map(u -> u.getId())
+                                .collect(Collectors.toSet()))
                 .build();
     }
 
