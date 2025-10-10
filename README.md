@@ -1,20 +1,25 @@
 # Task Manager API
 
-A Spring Boot REST API for managing tasks.
+A Spring Boot REST API for managing boards, task lists, tasks, and users.
 
-## Implemented so far
+## Features
 
-- Project initialized with Spring Boot and Maven
-- Switched configuration to `application.yml`
-- Integrated H2 in-memory database for development and testing
-- Added `Task` JPA entity and `TaskStatus` enum
-- Created unit test for the `Task` model
-- Added `TaskRepository` interface for data access
-- Implemented `TaskService` for business logic
-- Implemented `TaskController` with POST and GET endpoints for task creation and retrieval
-- Added custom `TaskNotFoundException` and global exception handler for 404 responses
-- Added unit and controller tests for service and endpoints, including not-found case
+- Manage boards, task lists, tasks, and users
+- Relationship-aware DTOs and entities
+- Validation and centralized error handling
+- Unit, integration, and controller tests
+- Database seeding for demo data
+- Global exception handler for clear error responses
 
 ## Getting Started
 
-- Java 17+ and Maven required
+- Java 17+
+- Lombok
+- Spring Boot
+- Maven
+- PostgreSQL/NeonDB (or H2 for development)
+- JPA/Hibernate
+
+## License
+
+This project is licensed under the MIT License.
