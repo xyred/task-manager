@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskListService {
@@ -75,6 +76,16 @@ public class TaskListService {
 
     public List<TaskList> getAllTaskLists() {
         return taskListRepository.findAll();
+    }
+
+    public List<TaskListDto> getTaskListsByBoardId(Long boardId) {
+        if (boardId == null) {
+            throw new IllegalArgumentException("Board ID must not be null");
+        }
+        
+        return taskListRepository.findByBoardId(boardId).stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     public TaskList updateTaskList(Long id, TaskList updatedTaskList) {

@@ -50,4 +50,10 @@ public class TaskListController {
         taskListService.deleteTaskList(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/board/{boardId}")
+    public ResponseEntity<List<TaskListDto>> getTaskListsByBoardId(@PathVariable Long boardId) {
+        List<TaskListDto> taskLists = taskListService.getTaskListsByBoardId(boardId);
+        return ResponseEntity.ok(taskLists);
+    }
 }
