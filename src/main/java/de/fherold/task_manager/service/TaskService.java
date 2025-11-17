@@ -92,6 +92,10 @@ public class TaskService {
         return taskRepository.findAll().stream().map(this::toDto).toList();
     }
 
+    public List<TaskDto> getTasksByTaskListId(Long taskListId) {
+        return taskRepository.findByTaskListId(taskListId).stream().map(this::toDto).toList();
+    }
+
     public TaskDto updateTask(Long id, TaskDto dto) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
