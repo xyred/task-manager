@@ -1,0 +1,37 @@
+### Get all boards
+GET http://localhost:8080/api/boards
+
+### Get a specific board
+GET http://localhost:8080/api/boards/7
+
+### Create a new board
+POST http://localhost:8080/api/boards
+Content-Type: application/json
+
+{
+  "title": "New Board",
+  "description": "This is a test board",
+  "taskListIds": [1, 2],
+  "memberIds": [1, 2]
+}
+
+### Update a board
+PUT http://localhost:8080/api/boards/7
+Content-Type: application/json
+
+{
+  "title": "Board Title",
+  "description": "Updated description"
+}
+
+### Delete a board
+DELETE http://localhost:8080/api/boards/4
+
+###
+PUT http://localhost:8080/api/boards/5
+Content-Type: application/json
+
+{
+  "title": "Updated Board Title",
+  "description": "Updated description"
+}

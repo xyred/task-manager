@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import de.fherold.task_manager.dto.BoardDto;
+import de.fherold.task_manager.exception.BoardNotFoundException;
 import de.fherold.task_manager.model.Board;
 import de.fherold.task_manager.model.TaskList;
 import de.fherold.task_manager.model.User;
@@ -64,6 +65,7 @@ public class BoardService {
     public BoardDto toDto(Board board) {
         if (board == null)
             return null;
+
         return BoardDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
@@ -96,29 +98,16 @@ public class BoardService {
     }
 
     public BoardDto updateBoard(Long id, BoardDto boardDto) {
-        Optional<Board> optionalBoard = boardRepository.findById(id);
-        if (optionalBoard.isEmpty()) {
-            return null;
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new BoardNotFoundException(id));
+
+        if (boardDto.getTitle() != null && !boardDto.getTitle().isBlank()) {
+            board.setTitle(boardDto.getTitle());
         }
-        Board board = optionalBoard.get();
-        board.setTitle(boardDto.getTitle());
-        board.setDescription(boardDto.getDescription());
 
-        List<TaskList> taskLists = boardDto.getTaskListIds() == null ? List.of()
-                : boardDto.getTaskListIds().stream()
-                        .map(taskListRepository::findById)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .toList();
-        board.setTaskLists(taskLists);
-
-        Set<User> users = boardDto.getMemberIds() == null ? Set.of()
-                : boardDto.getMemberIds().stream()
-                        .map(userRepository::findById)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toSet());
-        board.setUsers(users);
+        if (boardDto.getDescription() != null) {
+            board.setDescription(boardDto.getDescription());
+        }
 
         Board updated = boardRepository.save(board);
         return toDto(updated);
