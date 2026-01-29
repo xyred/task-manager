@@ -1,0 +1,44 @@
+### Get all task lists
+GET http://localhost:8080/api/tasklists
+Accept: application/json
+
+###
+
+### Get a specific task list by ID
+GET http://localhost:8080/api/tasklists/4
+Accept: application/json
+
+###
+
+### Get all task lists by board ID
+GET http://localhost:8080/api/tasklists/board/1
+Accept: application/json
+
+###
+
+### Create a new task list
+POST http://localhost:8080/api/tasklists
+Content-Type: application/json
+
+{
+  "title": "New Task List",
+  "position": 1,
+  "boardId": 3
+}
+
+###
+
+### Update an existing task list
+PUT http://localhost:8080/api/tasklists/{{taskListId}}
+Content-Type: application/json
+
+{
+  "title": "Updated Task List Title",
+  "position": 2,
+  "boardId": 5
+}
+
+###
+
+### Delete a task list
+DELETE http://localhost:8080/api/tasklists/{{taskListId}}

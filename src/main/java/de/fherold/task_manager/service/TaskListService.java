@@ -1,5 +1,11 @@
 package de.fherold.task_manager.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import de.fherold.task_manager.dto.TaskListDto;
 import de.fherold.task_manager.model.Board;
 import de.fherold.task_manager.model.Task;
@@ -8,11 +14,10 @@ import de.fherold.task_manager.repository.BoardRepository;
 import de.fherold.task_manager.repository.TaskListRepository;
 import de.fherold.task_manager.repository.TaskRepository;
 
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+/**
+ * Service class for managing task lists.
+ * Provides methods to create and manipulate task lists.
+ */
 
 @Service
 public class TaskListService {
@@ -53,6 +58,7 @@ public class TaskListService {
     public TaskListDto toDto(TaskList taskList) {
         if (taskList == null)
             return null;
+
         return TaskListDto.builder()
                 .id(taskList.getId())
                 .title(taskList.getTitle())
@@ -82,7 +88,7 @@ public class TaskListService {
         if (boardId == null) {
             throw new IllegalArgumentException("Board ID must not be null");
         }
-        
+
         return taskListRepository.findByBoardId(boardId).stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());

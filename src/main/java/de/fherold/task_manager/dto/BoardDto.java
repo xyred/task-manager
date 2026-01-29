@@ -28,7 +28,7 @@ public class BoardDto {
 
     @Size(max = 500, message = "Description must be at most 500 characters")
     private String description;
-    
+
     private List<Long> taskListIds; // IDs of the task lists associated with the board
     private Set<Long> memberIds; // IDs of users who are members of the board
 }
