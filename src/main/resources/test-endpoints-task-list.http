@@ -23,22 +23,22 @@ Content-Type: application/json
 {
   "title": "New Task List",
   "position": 1,
-  "boardId": 3
+  "boardId": 7
 }
 
 ###
 
 ### Update an existing task list
-PUT http://localhost:8080/api/tasklists/{{taskListId}}
+PUT http://localhost:8080/api/tasklists/4
 Content-Type: application/json
 
 {
   "title": "Updated Task List Title",
   "position": 2,
-  "boardId": 5
+  "boardId": 2
 }
 
 ###
 
 ### Delete a task list
-DELETE http://localhost:8080/api/tasklists/{{taskListId}}
+DELETE http://localhost:8080/api/tasklists/5

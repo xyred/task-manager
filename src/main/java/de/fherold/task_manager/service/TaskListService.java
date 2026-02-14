@@ -1,11 +1,5 @@
 package de.fherold.task_manager.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
 import de.fherold.task_manager.dto.TaskListDto;
 import de.fherold.task_manager.model.Board;
 import de.fherold.task_manager.model.Task;
@@ -13,6 +7,12 @@ import de.fherold.task_manager.model.TaskList;
 import de.fherold.task_manager.repository.BoardRepository;
 import de.fherold.task_manager.repository.TaskListRepository;
 import de.fherold.task_manager.repository.TaskRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing task lists.
@@ -27,7 +27,7 @@ public class TaskListService {
     private final TaskRepository taskRepository;
 
     public TaskListService(TaskListRepository taskListRepository, BoardRepository boardRepository,
-            TaskRepository taskRepository) {
+                           TaskRepository taskRepository) {
         this.taskListRepository = taskListRepository;
         this.boardRepository = boardRepository;
         this.taskRepository = taskRepository;
@@ -41,10 +41,10 @@ public class TaskListService {
 
         List<Task> tasks = dto.getTaskIds() == null ? List.of()
                 : dto.getTaskIds().stream()
-                        .map(taskRepository::findById)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .toList();
+                .map(taskRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .toList();
 
         return TaskList.builder()
                 .id(dto.getId())
@@ -66,9 +66,9 @@ public class TaskListService {
                 .boardId(taskList.getBoard() == null ? null : taskList.getBoard().getId())
                 .taskIds(taskList.getTasks() == null ? List.of()
                         : taskList.getTasks().stream()
-                                .filter(t -> t != null && t.getId() != null)
-                                .map(t -> t.getId())
-                                .toList())
+                        .filter(t -> t != null && t.getId() != null)
+                        .map(Task::getId)
+                        .toList())
                 .build();
     }
 
@@ -100,7 +100,13 @@ public class TaskListService {
                     existing.setTitle(updatedTaskList.getTitle());
                     existing.setPosition(updatedTaskList.getPosition());
                     existing.setBoard(updatedTaskList.getBoard());
-                    existing.setTasks(updatedTaskList.getTasks());
+
+                    // Ensure tasks list is mutable and relationships are set
+                    List<Task> tasks = new ArrayList<>(updatedTaskList.getTasks());
+                    for (Task task : tasks) {
+                        task.setTaskList(existing);
+                    }
+                    existing.setTasks(tasks);
 
                     return taskListRepository.save(existing);
                 })

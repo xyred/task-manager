@@ -2,7 +2,7 @@
 GET http://localhost:8080/api/boards
 
 ### Get a specific board
-GET http://localhost:8080/api/boards/7
+GET http://localhost:8080/api/boards/2
 
 ### Create a new board
 POST http://localhost:8080/api/boards
@@ -10,13 +10,11 @@ Content-Type: application/json
 
 {
   "title": "New Board",
-  "description": "This is a test board",
-  "taskListIds": [1, 2],
-  "memberIds": [1, 2]
+  "description": "This is a test board"
 }
 
 ### Update a board
-PUT http://localhost:8080/api/boards/7
+PUT http://localhost:8080/api/boards/8
 Content-Type: application/json
 
 {
@@ -25,7 +23,7 @@ Content-Type: application/json
 }
 
 ### Delete a board
-DELETE http://localhost:8080/api/boards/4
+DELETE http://localhost:8080/api/boards/9
 
 ###
 PUT http://localhost:8080/api/boards/5
